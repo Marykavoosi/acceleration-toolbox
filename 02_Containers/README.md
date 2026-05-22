@@ -75,133 +75,70 @@ You will work in groups. Each group is responsible for creating a working Docker
 3. Alignment + quantification (psueodalignment) --> ```Salmon```
 4. Differential expression analysis --> ```R + limma```
 
+### The workflow
 
-We will focus on:
+1. Write your Dockerfile: Your group will be given an incomplete or empty Dockerfile. Use the examples below to fill it out and make it working.
+2. Commit and Push: Push your completed Dockerfile to your group's specific branch on the workshop's GitHub repository.
+3. Wait for the Automated Build: Once pushed, a GitHub Action will automatically trigger. It will read your Dockerfile, build the image, and push it directly to Docker Hub. (Check the "Actions" tab in GitHub to watch it build!)
+4. Test on the HPC with Apptainer: Once the build is successful, log into the HPC. Use Apptainer to pull your new image from Docker Hub and test if the tool installed correctly by checking its version.
 
-- **Docker** (most widely used)
-- **Singularity / Apptainer** (commonly used on HPC systems)
-
-
-### Key Concepts
-
-- **Image**: A blueprint containing software and dependencies
-- **Container**: A running instance of an image
-- **Dockerfile**: A script used to build a Docker image
-
-### Containers in Nextflow
-
-Nextflow integrates seamlessly with containers. Each process in a pipeline can run in its own container, ensuring:
-
-- Reproducibility
-- Dependency isolation
-- Portability across systems
-
-Example (Nextflow process):
-
-```groovy
-process FASTQC {
-    container 'your-dockerhub-username/fastqc:latest'
-    """
-    fastqc input.fastq
-    """
-}
+### Testing Command Example
+Use this command to test your automatically built image on the HPC:
+```
+ml apptainer
+apptainer exec docker://hcemm/bioinfo-workshop:group_tag installed_tool --version
 ```
 
------------------
-### Workshop Task: Build Your Own Container
+|Group|Tool|DockerHub Tag|
+|------|--------|----------|
+| Group1 | FastQC + MultiQC | hcemm/bioinfo-workshop:fastqc|
+| Group2| trimmomatic | hcemm/bioinfo-workshop:trimming|
+| Group3 | salmon | hcemm/bioinfo-workshop:salmon|
+| Group4 | R + limma | hcemm/bioinfo-workshop:limma|
 
-You will work in groups. Each group will create a Docker container for one step of a typical RNA-seq workflow:
 
-* Quality Control → FastQC
-* Read Trimming → Trimmomatic / Cutadapt
-* Alignment / Quantification → Salmon
-* Differential Expression → R + DESeq2
+-----------------------
 
-Each group will:
+### 6. Example DockerFile
 
-- Write a Dockerfile
-- Build the image
-- Test the tool inside the container
-- Share the image for use in a Nextflow pipeline
-
-### Example 1: FastQC Container
-```FROM ubuntu:22.04
-
-RUN apt-get update && \
-    apt-get install -y fastqc default-jre && \
-    apt-get clean
-
-WORKDIR /data
-
-CMD ["fastqc", "--help"]
 ```
-**Build and test:**
-```
-docker build -t fastqc:test .
-docker run --rm fastqc:test
-```
+# 1. BASE IMAGE (Required)
+# Always start here. What OS or programming language environment do you need?
+FROM [base-image]:[version-tag]
 
-**Example 2: Trimming Container (Cutadapt)**
-```
-FROM python:3.10-slim
+# 2. METADATA (Optional but good practice)
+# Add labels for author, version, or description.
+LABEL maintainer="[your-name]" \
+      description="[what-this-container-does]"
 
-RUN pip install cutadapt
+# 3. ENVIRONMENT VARIABLES (Optional)
+# Set paths, locale settings, or flags (e.g., to stop interactive prompts during install).
+ENV [VARIABLE_NAME]="[value]"
 
-WORKDIR /data
+# 4. INSTALL DEPENDENCIES (Required)
+# Update the package manager, install your required tools, and CLEAN UP cache 
+# to keep the image size as small as possible. Combine into one RUN statement with &&.
+RUN [update-command] && \
+    [install-command] [dependency-1] [dependency-2] && \
+    [cleanup-command]
 
-CMD ["cutadapt", "--help"]
-```
+# 5. WORKING DIRECTORY (Recommended)
+# Set the default directory where all subsequent commands will be run.
+# If it doesn't exist, Docker creates it.
+WORKDIR /[directory-name]
 
-**Example 3: Salmon Container**
-```FROM ubuntu:22.04
+# 6. ADD LOCAL FILES (Optional)
+# Copy scripts, code, or configuration files from your computer/repo into the container.
+COPY [local-path-to-file] [container-destination-path]
 
-RUN apt-get update && \
-    apt-get install -y wget tar && \
-    wget https://github.com/COMBINE-lab/salmon/releases/latest/download/salmon-latest_linux_x86_64.tar.gz && \
-    tar -xzf salmon-latest_linux_x86_64.tar.gz && \
-    mv salmon-*/bin/salmon /usr/local/bin/ && \
-    rm -rf salmon*
+# 7. EXECUTION COMMAND (Required)
+# The default command that runs when the container starts.
+# Use the "exec form" (JSON array) for cleaner signal handling.
+CMD ["[tool-or-executable]", "[flag]", "[argument]"]
 
-WORKDIR /data
-
-CMD ["salmon", "--help"]
+# (Alternative to CMD) 
+# Use ENTRYPOINT if the container is designed to run ONLY one specific tool, 
+# treating any extra arguments passed during 'docker run' as arguments for that tool.
+# ENTRYPOINT ["[tool-or-executable]"]
 ```
 
-**Example 4: R + DESeq2 Container**
-```FROM rocker/r-base:4.3.1
-
-RUN apt-get update && \
-    apt-get install -y libxml2-dev libcurl4-openssl-dev libssl-dev && \
-    R -e "install.packages('BiocManager')" && \
-    R -e "BiocManager::install('DESeq2')"
-
-WORKDIR /data
-
-COPY deseq2_script.R /data/
-
-CMD ["Rscript", "deseq2_script.R"]
-```
-### Testing Your Container
-
-> Run your container with mounted data:
-```
-docker run --rm -v $(pwd):/data your-image-name <command>
-```
-### Using Containers with Apptainer (HPC)
-
-If Docker is not available (e.g., on a cluster), you can use Apptainer:
-```
-apptainer pull docker://your-dockerhub-username/fastqc:latest
-apptainer exec fastqc_latest.sif fastqc --help
-```
-**Collaboration**
-Each group should:
-
-- Push their Dockerfile to GitHub
-- Build and (optionally) upload the image to Docker Hub
-- Document:
-	- Tool version
-	- Inputs/outputs
-	- Example command
-
-> At the end, we will combine all containers into a full Nextflow pipeline.
