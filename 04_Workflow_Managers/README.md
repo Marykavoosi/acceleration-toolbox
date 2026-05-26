@@ -71,3 +71,8 @@ You and your group will:
 - Ensure reproducibility: Use Docker/Apptainer containers to lock down software versions.
 - Collaborate: Share your modules through GitHub and Docker Hub.
 - Implement Nextflow: Combine everything into a fully functional, automated Nextflow pipeline.
+  
+------------------
+|Previous|Home|Next|
+|--------|----|----|
+|[CI/CD](../03_CICD/README.md)|[Home](../README.md)|[Nextflow](../05_Nextflow/README.md)
