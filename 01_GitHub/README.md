@@ -66,3 +66,8 @@ Testing code (also known as [Continuous Integration](https://en.wikipedia.org/wi
 ### 3.2. Your task
 
 We have multiple groups for multiple different tasks. Each group will be working on a different part of the pipeline, and you will be collaborating with your group members to complete the task.
+
+------------------
+|Previous|Home|Next|
+|--------|----|----|
+|[Home](../README.md)|[Home](../README.md)|[Containers](../02_Containers/README.md)
