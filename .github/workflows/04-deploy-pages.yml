@@ -1,0 +1,30 @@
+name: Deploy GitHub Pages
+
+on:
+  workflow_run:
+    workflows:
+      - Build Docs Site
+      - Full Pipeline
+    types:
+      - completed
+
+permissions:
+  pages: write
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download latest site artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: 01_GitHub/site
+
+      - name: Deploy to Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: 01_GitHub/site

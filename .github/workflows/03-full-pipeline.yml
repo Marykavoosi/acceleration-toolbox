@@ -65,15 +65,16 @@ jobs:
         shell: micromamba-shell {0}
         run: multiqc pipeline_results -c 01_GitHub/data/multiqc_config.yaml -o multiqc_out
 
-      # - name: Prepare Pages structure
-      #   run: |
-      #     mkdir -p site/multiqc-report
-      #     cp multiqc_out/multiqc_report.html site/multiqc-report/multiqc_report.html
+      - name: Prepare site folder
+        run: |
+          mkdir -p 01_GitHub/site/multiqc-report
+          cp multiqc_out/multiqc_report.html 01_GitHub/site/multiqc-report/multiqc_report.html
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload site artifact (merge)
+        uses: actions/upload-artifact@v4
         with:
-          path: multiqc_out
+          name: site
+          path: 01_GitHub/site
 
   deploy:
     name: Deploy GitHub Pages
