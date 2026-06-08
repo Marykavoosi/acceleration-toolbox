@@ -28,7 +28,7 @@ jobs:
           cache-downloads: true
 
       - name: Run full pipeline
-        run: bash main.sh
+        run: bash 01_GitHub/main.sh
 
       - name: Upload results
         uses: actions/upload-artifact@v4
