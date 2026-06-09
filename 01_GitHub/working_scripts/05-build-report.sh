@@ -7,6 +7,8 @@ MULTIQC_CONFIG=$3
 
 echo "Generating MultiQC report"
 
+mkdir -p "$OUTPUT_DIR"/multiqc_report
+
 multiqc "$INPUT_DIR" -c "$MULTIQC_CONFIG" -o "$OUTPUT_DIR"/multiqc_report
 
 # check if multiqc_report directory was generated, and exit code 1 if not

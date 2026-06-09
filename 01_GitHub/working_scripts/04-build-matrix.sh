@@ -7,6 +7,8 @@ N_FILES=12
 
 echo "Counting matches into summary matrix"
 
+mkdir -p "$OUTPUT_DIR"
+
 python 01_GitHub/scripts/build_matrix.py "$RESULTS_DIR" "$OUTPUT_DIR"
 
 # check if the matrix file was created successfully
