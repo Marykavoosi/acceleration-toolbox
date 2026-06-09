@@ -17,7 +17,8 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v4
+      - name: Checkout repo 
+        uses: actions/checkout@v4
 
       - name: Setup environment
         uses: mamba-org/setup-micromamba@v2
@@ -26,7 +27,7 @@ jobs:
           cache-environment: true
           cache-downloads: true
 
-      - name: Run pipeline
+      - name: Run full pipeline
         shell: micromamba-shell {0}
         run: |
           bash 01_GitHub/scripts/00-download-db.sh
@@ -38,7 +39,7 @@ jobs:
           path: 01_GitHub/results/multiqc_out
 
   deploy:
-    needs: pipeline
+    needs: run-pipeline
     runs-on: ubuntu-latest
 
     environment:
