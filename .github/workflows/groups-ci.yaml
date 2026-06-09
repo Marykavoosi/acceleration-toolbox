@@ -61,7 +61,9 @@ jobs:
 
       - name: Run annotation step
         shell: micromamba-shell {0}
-        run: bash 01_GitHub/scripts/03-annotation.sh 01_GitHub/data test_output 01_GitHub/data/db/db_trimmed.dmnd 8
+        run: |
+          bash 01_GitHub/scripts/00-download-db.sh
+          bash 01_GitHub/scripts/03-annotation.sh 01_GitHub/data test_output 01_GitHub/data/db_trimmed.dmnd 8
   
   build-matrix:
     runs-on: ubuntu-latest
@@ -95,4 +97,4 @@ jobs:
 
       - name: Run MultiQC
         shell: micromamba-shell {0}
-        run: bash 01_GitHub/scripts/05-multiqc.sh 01_GitHub/ci_input 01_GitHub/data/multiqc_config.yaml
+        run: bash 01_GitHub/scripts/05-build-report.sh 01_GitHub/ci_input 01_GitHub/data/multiqc_config.yaml
