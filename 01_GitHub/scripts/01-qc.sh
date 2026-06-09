@@ -16,7 +16,6 @@ echo "Running FastQC on raw reads"
 # USE $THREADS
 fastqc "$READS_DIR"/*.fastq.gz --outdir "$RESULTS_DIR" --threads $THREADS
 
-
 # Check if 12 FastQC reports were generated, and exit code 1 if not
 if [ $(ls "$RESULTS_DIR"/*_fastqc.zip | wc -l) -ne $N_FILES ]; then
     echo "Error: Not all FastQC reports were generated. Expected $N_FILES, but found $(ls "$RESULTS_DIR"/*_fastqc.zip | wc -l)."

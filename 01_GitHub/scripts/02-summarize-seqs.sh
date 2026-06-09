@@ -16,6 +16,11 @@ do
     echo "Processing file: $FILE"
 
     SAMPLE=$(basename "$FILE" .fastq.gz)
+
+    # GROUP 2 - WRITE HERE THE COMMAND TO RUN SEQKIT STATS AND APPEND TO OUTPUT FILE
+    # READS ARE GZIPPED AT $READS_DIR
+    # FOR EACH FILE, RUN seqkit stats, AND APPEND THE OUTPUT TO $OUTPUT_FILENAME
+    # tips below
     
     seqkit stats -T "$FILE" --threads "$THREADS" \
     | tail -n +2 \

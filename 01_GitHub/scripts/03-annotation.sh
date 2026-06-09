@@ -24,7 +24,6 @@ do
     # OUTFMT SHOULD BE 6 (TABULAR)
     # tips below
     diamond blastx -d "$DB" -q "$FILE" -o "$RESULTS_DIR"/$(basename "$FILE" .fastq.gz)_matches.tab --threads "$THREADS" --max-target-seqs "$MAX_TARGET_SEQS" --outfmt 6
-
     
 done
 
