@@ -14,6 +14,7 @@ echo "Running FastQC on raw reads"
 # READS ARE GZIPPED AT $READS_DIR
 # OUTPUT SHOULD GO TO $RESULTS_DIR
 # USE $THREADS
+fastqc "$READS_DIR"/*.fastq.gz --outdir "$RESULTS_DIR" --threads $THREADS
 
 
 # Check if 12 FastQC reports were generated, and exit code 1 if not
