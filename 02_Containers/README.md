@@ -101,7 +101,7 @@ apptainer exec docker://hcemm/bioinfo-workshop:group_tag installed_tool --versio
 
 ### 6. Example DockerFile
 
-```
+```sh
 # 1. BASE IMAGE (Required)
 # Always start here. What OS or programming language environment do you need?
 FROM [base-image]:[version-tag]

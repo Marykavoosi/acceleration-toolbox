@@ -12,7 +12,7 @@ Please make sure you:
 
 ## 1. The Version Control System
 
-One of the Scientific Computing tutorials explains the main concepts of version control, go [take a look](https://github.com/HCEMM/sc-tutorials/blob/main/github_tutorial/README.md#2-the-version-control-workflow).
+One of the Scientific Computing tutorials explains the main concepts of version control, go [take a look](https://github.com/HCEMM/sc-tutorials/blob/main/github_tutorial/README.md).
 
 ## 2. Working on your own repository
 
