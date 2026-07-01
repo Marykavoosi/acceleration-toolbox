@@ -1,0 +1,32 @@
+# 1. Define the base image.
+# Hint: Instead of raw Ubuntu, we are using the official "Rocker" project base image,
+# which comes with a specific version of R pre-installed so our analysis is reproducible!
+FROM rocker/r-ver:4.3.2
+
+# 2. Prevent Ubuntu from asking interactive questions during installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 3. Install required underlying Linux system libraries
+# Hint: Bioconductor packages do heavy math and networking. They will crash during
+# installation if they can't find these core Linux development libraries!
+RUN apt-get update && \
+    apt-get install -y \
+    libcurl4-openssl-dev \
+    libxml2-dev \
+    libssl-dev \
+    libfontconfig1-dev \
+    libharfbuzz-dev \
+    libfribidi-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+# 4. Install the R packages
+# Hint: We can pass commands directly to R using 'Rscript -e'
+# Fill in the Docker instruction that executes a command!
+RUN Rscript -e "install.packages('BiocManager'); BiocManager::install(c('tximport', 'edgeR', 'limma'))"
+
+# 5. Set the default working directory
+WORKDIR /data
+
+# 6. Set the default command
+# Hint: We want the container to launch into the interactive R console when it starts.
+CMD ["R"]
