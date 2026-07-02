@@ -211,42 +211,27 @@ Once the processes are updated, please:
 image
 
 > Once all groups have created a PR, a whole pipeline test will be performed! ✅
-### Step 4: Version Control and CI/CD
-Once your group has a working process, it is time to integrate it into the main pipeline. We will follow standard, real-world software development practices.
 
-**1. Push to Your Branch**
-Commit your finished code and push it to your specific group's branch:
+---------
+### Group and branch names
+|Group|Tool|Branch|DockerHub Tag|
+|------|--------|-------|----------|
+| Group1 | FastQC + MultiQC |fastqc-g1| hcemm/bioinfo-workshop:fastqc|
+| Group2| trimmomatic |trimming-g2| hcemm/bioinfo-workshop:trimming|
+| Group3 | salmon |salmon-g3| hcemm/bioinfo-workshop:salmon|
+| Group4 | R + limma |limma-g4| hcemm/bioinfo-workshop:limma|
 
-```
-git add processes/your_process.nf
-git commit -m "feat: complete [Tool Name] process"
-git push origin group-[X]-branch
-```
-
-**2. Open a Pull Request (PR)**
-Go to the repository on GitHub and open a Pull Request to merge your branch into the main branch.
-
-**3. Automated CI/CD Tests (Continuous Integration)**
-When you open your PR, you will likely notice automated checks running in GitHub. What is happening here?
-
-- Syntax Checking: A CI/CD pipeline (via GitHub Actions) automatically lints your Nextflow code to ensure there are no missing brackets, typos, or syntax errors.
-- Dry Runs: It may also run a tiny, simulated test dataset to verify that your process actually executes without instantly crashing.
-
-> If the tests turn green, your code is verified and ready to be merged by the instructor!
-
-**Step 5: The Grand Finale — Running the Pipeline**
-Once all groups have successfully passed their CI/CD checks, the instructor will merge all the Pull Requests into the main branch.
-
-We will then run the complete, integrated pipeline from the HPC terminal using this command:
+### Part 4: Execution & Debugging
+Once all PRs are merged into the main branch and tested with Github Actions, we execute our pipeline.
 
 ```
-nextflow run main.nf -profile slurm -resume
+nextflow run main.nf -resume
 ```
+> *Note on ```-resume```: If the pipeline crashes, fix the typo and run this exact command again. Nextflow uses cached hashes to skip completed steps and instantly restart at the point of failure.*
 
-> Pro-Tip: The -resume Flag > This is Nextflow's superpower. If the pipeline fails halfway through (e.g., a typo in the R script), you don't have to start from scratch. Fixing the error and running with -resume tells Nextflow to use cached results for the successful steps and only rerun what failed!
 
-**Step 6: Inspecting the Outputs**
-As the pipeline finishes, we need to understand where our data went. Nextflow generates two highly important directories that you need to know how to navigate:
+### Inspecting the Outputs
+Nextflow generates two critical directories. Knowing the difference is key to debugging. (```work``` and ```results```)
 
 1. The ```work/``` Directory (The Engine Room)
 - Nextflow executes every single process in a heavily isolated, hidden directory inside the work/ folder.
