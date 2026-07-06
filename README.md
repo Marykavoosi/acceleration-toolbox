@@ -8,6 +8,7 @@
 - ⚡ CI/CD with GitHub Actions
 - 🔄 Nextflow workflows
 - 🧬 nf-core pipelines
+- no collaboration parties
 
 ### Workshop Roadmap
 1. Introduction
