@@ -1,0 +1,8 @@
+version: "3.8"
+
+services:
+  seqkit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: seqkit-workshop:latest
