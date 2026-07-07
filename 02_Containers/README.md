@@ -243,9 +243,13 @@ CMD ["[tool-or-executable]", "[flag]", "[argument]"]
 Because python:slim:
 
 is much smaller in size
+
 contains only essential dependencies
+
 reduces build time
+
 reduces security vulnerabilities
+
 is faster to transfer and deploy (important for HPC + CI)
 
 👉 Ubuntu full images include many unnecessary packages that are not needed for bioinformatics pipelines.
@@ -258,8 +262,11 @@ is faster to transfer and deploy (important for HPC + CI)
 You choose based on the tool ecosystem:
 
 Python tools → python:* images
+
 R tools → rocker/r-ver
+
 Conda-based pipelines → continuumio/miniconda3
+
 Prebuilt bioinformatics tools → biocontainers/*
 
 👉 Rule of thumb:
@@ -275,7 +282,9 @@ Because package managers store temporary files used only during installation.
 Cleaning cache:
 
 reduces image size significantly
+
 removes unnecessary build artifacts
+
 improves portability and download speed
 
 👉 Especially important in HPC where storage + transfer matters.
@@ -287,22 +296,26 @@ improves portability and download speed
 
 Because it contains:
 
-package index metadata
-used only during apt-get update
+package index metadata used only during apt-get update
 
 After installation, it is no longer needed.
 
 👉 Removing it:
 
 reduces image size
+
 avoids stale package metadata
+
 improves reproducibility of builds
+
 </details>
 
 3.5 What happens if you don’t set WORKDIR?
 <details> <summary><b>Answer</b></summary>
 The container uses / (root) as default working directory
+
 files may be written in unexpected locations
+
 relative paths may break scripts
 
 👉 WORKDIR ensures predictable execution context.
@@ -315,7 +328,9 @@ relative paths may break scripts
 Because locale settings affect:
 
 string sorting
+
 text parsing behavior
+
 character encoding
 
 Setting:
@@ -325,6 +340,7 @@ LC_ALL=C
 ensures:
 
 consistent ASCII-based sorting
+
 reproducible output across systems
 
 👉 Prevents subtle differences between environments.
@@ -337,7 +353,9 @@ reproducible output across systems
 Use ENTRYPOINT when:
 
 the container is designed for one tool only
+
 you want to enforce a fixed executable
+
 you want consistent CLI behavior
 
 Example:
@@ -355,7 +373,9 @@ you want flexibility in overriding commands
 Because it:
 
 automatically deletes the container after execution
+
 prevents accumulation of stopped containers
+
 keeps the system clean during iterative testing
 
 👉 Important for rapid debugging workflows.
@@ -379,14 +399,19 @@ Container = object instance
 Because HPC environments:
 
 are shared between many users
+
 do not allow root access (security)
+
 require reproducible software environments
 
 Containers solve this by:
 
 packaging software + dependencies
+
 running without root (Apptainer)
+
 ensuring reproducibility across users
+
 </details>
 
 5.3 Why is reproducibility improved by containers?
@@ -395,8 +420,11 @@ ensuring reproducibility across users
 Because containers fix:
 
 software versions
+
 dependency versions
+
 system libraries
+
 environment configuration
 
 👉 This ensures that the same pipeline produces the same results across machines and time.
@@ -409,13 +437,17 @@ environment configuration
 Without containers:
 
 dependency conflicts occur (“dependency hell”)
+
 one tool overwrites the other’s environment
+
 pipeline breaks
 
 With containers:
 
 each tool runs in isolated environment
+
 no conflicts between versions
+
 </details>
 
 5.5 Could you fully reproduce a container without internet access?
@@ -424,6 +456,7 @@ no conflicts between versions
 Yes, but only if:
 
 all dependencies are already included in the image
+
 no external downloads are required during build or runtime
 
 If external sources are needed:
@@ -437,8 +470,11 @@ reproducibility fails without network access
 External dependencies outside the container:
 
 package repositories (apt, CRAN, pip)
+
 GitHub source code
+
 online databases
+
 remote downloads during build
 
 👉 If those change or disappear, builds may break even if the container definition is unchanged.
